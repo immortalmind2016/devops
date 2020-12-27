@@ -4,11 +4,13 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mocha": "^8.2.1"
   },
   "devDependencies": {},
   "scripts": {
-    "start":"node index.js"
+    "start": "node index.js",
+    "test":"mocha"
   },
   "repository": {
     "type": "git",

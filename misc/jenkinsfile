@@ -1,0 +1,24 @@
+node{
+    def commit_id
+    stage("Preperation"){
+        //Ensure of git clone of Source code (git)
+        checkout scm
+        // Give us the commit-id , save it in ./git/commit-id file 
+        sh "git rev-parse --short HEAD > .git/commit-id"
+        commit_id=readFile(".git/commit-id").trim()
+    }
+    stage("test"){
+        nodejs("nodejs"){
+            sh "npm install --only dev"
+            sh "npm test"
+        }
+    }
+    stage("docker build/publish"){
+        //https://index.docker.io/v1/" refers to dockerhub
+        //dockerhub is id Of Credtial (saved in docker config)
+        docker.withRegistry("https://index.docker.io/v1/","dockerhub"){
+            //. current path of Dockerfile then push
+            def app=docker.build("0115120323/nodejs-docker-example:${commit_id}",".").push
+        }
+    }
+}
